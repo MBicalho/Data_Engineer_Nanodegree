@@ -61,8 +61,7 @@ A modelagem foi realizada utilizando o esquema de estrela, com uma tabela fato n
 | data | The root of project, where are the datas of songs and logs |
 | images | Where it is stored as images used in the project |
 | create_tables.py | File used to connect to the database, and call the create, insert and drop functions of the created tables |
-| sql_queries.py | 
-File used to store the creation, insertion and drop codes of the tables used in the project. |
+| sql_queries.py | File used to store the creation, insertion and drop codes of the tables used in the project. |
 | etl.ipynb | Template to follow for storing song_data and log_data files and inserting them into tables. |
 | test.ipynb | Template to validate the inserts in the tables. |
 | etl.py | File to store song_data and log_data files and insert them into tables |
