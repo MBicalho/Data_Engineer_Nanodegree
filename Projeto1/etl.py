@@ -3,6 +3,8 @@ import glob
 import psycopg2
 import pandas as pd
 from sql_queries import *
+
+def process_song_file(cur, filepath):
 """
 Function that will go through the data json files and transform them into a dataframe, 
 after that it will be responsible for inserting this data inside our tables.
@@ -14,7 +16,8 @@ Arguments:
         cur -> cursor object.
         filepath -> file path of the song or artist data.
 """
-def process_song_file(cur, filepath):
+        
+        
     # open song file
     df = pd.read_json(filepath, lines=True)
    
@@ -27,7 +30,11 @@ def process_song_file(cur, filepath):
     artist_data = df[['artist_id', 'artist_name', 'artist_location', 'artist_latitude', 'artist_longitude']].values[0].tolist()
     cur.execute(artist_table_insert, artist_data)
 
-    
+
+def process_log_file(cur, filepath):
+        
+        
+        
 """
 Function that will go through the log json files, convert the timestamp column and transform them into a dataframe, 
 after that it will be responsible for inserting data in time and users tables.
@@ -44,7 +51,6 @@ Arguments:
         filepath -> file path of the log data.
 """    
 
-def process_log_file(cur, filepath):
     # open log file
     df = pd.read_json(filepath, lines=True)
 
@@ -87,7 +93,11 @@ def process_log_file(cur, filepath):
         songplay_data = (pd.to_datetime(row.ts, unit='ms'), row.userId, artistid, row.sessionId, songid, row.location, row.userAgent, row.level)
         cur.execute(songplay_table_insert, songplay_data)
 
-        """
+
+
+def process_data(cur, conn, filepath, func):
+        
+ """
         This function is responsible for capturing all the files in the directory and then
         performs the execution of each function responsible for inserting data into our database.
         
@@ -100,9 +110,7 @@ def process_log_file(cur, filepath):
                 filepath -> file path of the data or log json
                 func -> the function to be performed 
         
-        """
-
-def process_data(cur, conn, filepath, func):
+ """
     # get all files matching extension from directory
     all_files = []
     for root, dirs, files in os.walk(filepath):
