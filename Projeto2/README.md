@@ -47,7 +47,7 @@ The modeling will be done thinking about the queries that we will need to perfor
 
 A modelagem será feita pensando sobre as consultas que precisaremos realizar primeiro, após isso criaremos nossas tabelas.
 
-![ERD](./images/Screenshot_44.png)
+![ERD](./images/Projeto2.png)
 
 
 # Project Structure
