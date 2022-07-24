@@ -1,6 +1,6 @@
-<h3 align="center">Data Modeling ETL with PostgreSQL</h3>
+<h3 align="center">Data Modeling ETL with NoSQL Apache Cassandra</h3>
 <p align="center">
- Udacity Data Engineer Nanodegree Course Project 1
+ Udacity Data Engineer Nanodegree Course Project 2
  <br />
 </p>
 
@@ -54,13 +54,10 @@ A modelagem será feita pensando sobre as consultas que precisaremos realizar pr
 
 |File/Folder| File/Folder Description |
 | --- | --- |
-| data | The root of project, where are the datas of songs and logs |
+| event_data | The root of project, where are the datas |
+| event_datafile_new.csv | CSV file with the data |
 | images | Where it is stored as images used in the project |
-| create_tables.py | File used to connect to the database, and call the create, insert and drop functions of the created tables |
-| sql_queries.py | File used to store the creation, insertion and drop codes of the tables used in the project. |
-| etl.ipynb | Template to follow for storing song_data and log_data files and inserting them into tables. |
-| test.ipynb | Template to validate the inserts in the tables. |
-| etl.py | File to store song_data and log_data files and insert them into tables |
+| Project_1B_ Project_Template.ipynb | Where I read the CSV files, create the tables, and make the queries in the database |
 | README.md | Readme |
 
 # How to Execute
@@ -71,16 +68,14 @@ Clone the repository on your machine run through the command.
 # Tools to Execute the project
 
 * Python
-* PostgreSQL
-* Pandas, psycopg2 and glob libraries
+* NoSQL Apache Cassandra
+* Pandas, numpy and glob libraries
+* Jupyter notebook
 
 # Step by Step
 
-* Run the file ```create_tables.py```
-```python create_tables.py```
-* Run the file ```etl.py```
-```python etl.py```
-* Test with the ```test.ipynb```
+* Run the file
+```Project_1B_ Project_Template.ipynb```
 
 # Contact
 Matheus Bicalho [mbicalho.freitas@gmail.com]
