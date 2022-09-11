@@ -1,6 +1,6 @@
-<h3 align="center">Data Modeling ETL with NoSQL Apache Cassandra</h3>
+<h3 align="center">Cloud Data Warehouse</h3>
 <p align="center">
- Udacity Data Engineer Nanodegree Course Project 2
+ Udacity Data Engineer Nanodegree Course Project 3
  <br />
 </p>
 
