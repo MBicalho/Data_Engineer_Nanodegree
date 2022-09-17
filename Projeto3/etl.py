@@ -4,18 +4,18 @@ from sql_queries import copy_table_queries, insert_table_queries
 
 
 def load_staging_tables(cur, conn):
-"""
-Function that will take data from S3 and insert it into staging
-"""
+    """
+    Function that will take data from S3 and insert it into staging
+    """
     for query in copy_table_queries:
         cur.execute(query)
         conn.commit()
 
 
 def insert_tables(cur, conn):
-"""  
-Function that will take the staging data and insert it into our tables
-"""
+    """  
+    Function that will take the staging data and insert it into our tables
+    """
     for query in insert_table_queries:
         cur.execute(query)
         conn.commit()
