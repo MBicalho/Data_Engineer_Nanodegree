@@ -81,7 +81,7 @@ def process_log_data(spark, input_data, output_data):
                            'sessionId', 'location', 'userAgent')
 
     # extract columns for users table    
-    users_table = df.select('userId', 'firstName', 'lastName', 'gender', 'level').dropDuplicates()
+    users_table = df.select('userId', 'firstName', 'lastName', 'gender', 'level').dropDuplicates(subset=['userId'])
     users_table.createOrReplaceTempView('users')
     
     # write users table to parquet files
