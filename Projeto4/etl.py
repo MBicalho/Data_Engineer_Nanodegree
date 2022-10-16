@@ -4,6 +4,8 @@ import os
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import udf, col
 from pyspark.sql.functions import year, month, dayofmonth, hour, weekofyear, date_format
+from pyspark.sql.functions as S
+from pyspark.sql.window import Window
 
 
 config = configparser.ConfigParser()
@@ -73,38 +75,34 @@ def process_log_data(spark, input_data, output_data):
     log_data = log_data = input_data + "log_data/*/*/*.json"
 
     # read log data file
-    df = spark.read.json(log_data)
+    log_df = spark.read.json(log_data)
     
     # filter by actions for song plays
-    log_df = df.filter(df.page == 'NextSong') \
-                   .select('ts', 'userId', 'level', 'song', 'artist',
-                           'sessionId', 'location', 'userAgent')
+    log_df = log_df.where('page="NextSong"')
 
     # extract columns for users table    
-    users_table = df.select('userId', 'firstName', 'lastName', 'gender', 'level').dropDuplicates(subset=['userId'])
-    users_table.createOrReplaceTempView('users')
+    users_table = log_df.select(["userId", "firstName", "lastName", "gender", "level"]).distinct()
     
     # write users table to parquet files
     users_table.write.parquet(os.path.join(output_data, 'users/users.parquet'), 'overwrite')
 
     # create timestamp column from original timestamp column
-    get_timestamp = udf(lambda x: str(int(int(x)/1000)))
-    log_df = log_df.withColumn('timestamp', get_timestamp(log_df.ts))
+    log_df = log_df.withColumn('timestamp',( (log_df.ts.cast('float')/1000).cast("timestamp")) )
     
     # create datetime column from original timestamp column
     get_datetime = udf(lambda x: str(datetime.fromtimestamp(int(x) / 1000)))
     log_df = log_df.withColumn('datetime', get_datetime(log_df.ts))
     
     # extract columns to create time table
-    time_table = log_df.select('datetime') \
-                           .withColumn('start_time', log.datetime) \
-                           .withColumn('hour', hour('datetime')) \
-                           .withColumn('day', dayofmonth('datetime')) \
-                           .withColumn('week', weekofyear('datetime')) \
-                           .withColumn('month', month('datetime')) \
-                           .withColumn('year', year('datetime')) \
-                           .withColumn('weekday', dayofweek('datetime')) \
-                           .dropDuplicates()
+    time_table = log_df.select(
+                    S.col("timestamp").alias("start_time"),
+                    S.hour("timestamp").alias('hour'),
+                    S.dayofmonth("timestamp").alias('day'),
+                    S.weekofyear("timestamp").alias('week'),
+                    S.month("timestamp").alias('month'), 
+                    S.year("timestamp").alias('year'), 
+                    S.date_format(F.col("timestamp"), "E").alias("weekday")
+                )
     
     # write time table to parquet files partitioned by year and month
     time_table.write.partitionBy('year', 'month') \
