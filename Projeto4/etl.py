@@ -11,8 +11,8 @@ from datetime import datetime
 config = configparser.ConfigParser()
 config.read('dl.cfg')
 
-os.environ['AWS_ACCESS_KEY_ID']=config['AWS_ACCESS_KEY_ID']
-os.environ['AWS_SECRET_ACCESS_KEY']=config['AWS_SECRET_ACCESS_KEY']
+os.environ['AWS_ACCESS_KEY_ID']=config['AWS']['AWS_ACCESS_KEY_ID']
+os.environ['AWS_SECRET_ACCESS_KEY']=config['AWS']['AWS_SECRET_ACCESS_KEY']
 
 
 def create_spark_session():
@@ -88,6 +88,10 @@ def process_log_data(spark, input_data, output_data):
 
     # create timestamp column from original timestamp column
     log_df = log_df.withColumn('timestamp',( (log_df.ts.cast('float')/1000).cast("timestamp")) )
+    
+    # create datetime column from original timestamp column
+    get_datetime = udf(lambda x: str(datetime.fromtimestamp(int(x) / 1000)))
+    log_df = log_df.withColumn('datetime', get_datetime(log_df.ts))
     
     # extract columns to create time table
     time_table = log_df.select(
