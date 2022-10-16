@@ -89,10 +89,6 @@ def process_log_data(spark, input_data, output_data):
     # create timestamp column from original timestamp column
     log_df = log_df.withColumn('timestamp',( (log_df.ts.cast('float')/1000).cast("timestamp")) )
     
-    # create datetime column from original timestamp column
-    get_datetime = udf(lambda x: str(datetime.fromtimestamp(int(x) / 1000)))
-    log_df = log_df.withColumn('datetime', get_datetime(log_df.ts))
-    
     # extract columns to create time table
     time_table = log_df.select(
                     S.col("timestamp").alias("start_time"),
