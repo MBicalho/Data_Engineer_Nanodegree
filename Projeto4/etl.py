@@ -1,11 +1,11 @@
 import configparser
-from datetime import datetime
 import os
+import pyspark.sql.functions as S
+
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import udf, col
-from pyspark.sql.functions import year, month, dayofmonth, hour, weekofyear, date_format
-from pyspark.sql.functions as S
 from pyspark.sql.window import Window
+from datetime import datetime
+
 
 
 config = configparser.ConfigParser()
@@ -89,10 +89,6 @@ def process_log_data(spark, input_data, output_data):
     # create timestamp column from original timestamp column
     log_df = log_df.withColumn('timestamp',( (log_df.ts.cast('float')/1000).cast("timestamp")) )
     
-    # create datetime column from original timestamp column
-    get_datetime = udf(lambda x: str(datetime.fromtimestamp(int(x) / 1000)))
-    log_df = log_df.withColumn('datetime', get_datetime(log_df.ts))
-    
     # extract columns to create time table
     time_table = log_df.select(
                     S.col("timestamp").alias("start_time"),
@@ -136,9 +132,11 @@ def main():
     """
     Run the ETL to process the song_data and the log_data files
     """
+    
+    
     spark = create_spark_session()
     input_data = "s3a://udacity-dend/"
-    output_data = "s3://data-lake-matheus/matheus-s3/"
+    output_data = "s3://matheus-data-lake/data-lake/"
     
     process_song_data(spark, input_data, output_data)    
     process_log_data(spark, input_data, output_data)
