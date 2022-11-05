@@ -97,7 +97,7 @@ def process_log_data(spark, input_data, output_data):
                     S.weekofyear("timestamp").alias('week'),
                     S.month("timestamp").alias('month'), 
                     S.year("timestamp").alias('year'), 
-                    S.date_format(F.col("timestamp"), "E").alias("weekday")
+                    S.date_format(S.col("timestamp"), "E").alias("weekday")
                 )
     
     # write time table to parquet files partitioned by year and month
