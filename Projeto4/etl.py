@@ -115,7 +115,7 @@ def process_log_data(spark, input_data, output_data):
     # extract columns from joined song and log datasets to create songplays table 
     songplays_table = song_log_joined_table.distinct() \
                         .select("userId", "timestamp", "song_id", "artist_id", "level", "sessionId", "location", "userAgent" ) \
-                        .withColumn("songplay_id", F.row_number().over( Window.partitionBy('timestamp').orderBy("timestamp"))) \
+                        .withColumn("songplay_id", S.row_number().over( Window.partitionBy('timestamp').orderBy("timestamp"))) \
                         .withColumnRenamed("userId","user_id")        \
                         .withColumnRenamed("timestamp","start_time")  \
                         .withColumnRenamed("sessionId","session_id")  \
