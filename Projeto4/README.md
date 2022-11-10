@@ -99,6 +99,7 @@ Os dados armazenados no S3 serão extraídos e popularemos nossas tabelas atrav�
 | data | Folder with the root of the project  |
 | etl.py | File Python with the etl from S3 buckets to the tables |
 | dl.cfg | File with the configurations of the AWS |
+| bucket.py | File for create the bucket in S3 |
 | README.md | Readme |
 
 # How to Execute
@@ -113,13 +114,14 @@ Clone the repository on your machine run through the command.
 * Spark
 
 # Step by Step
-*Configure
+* Configure
 
 First configure the file ```dl.cfg```
 
-Second, create the bucket and just write the URL in the output_data in main()
+* Run the file for create the bucket
+```bucket.py```
 
-* Run the file
+* Run the file for etl process
 ```etl.py```
 
 
