@@ -118,8 +118,7 @@ Clone the repository on your machine run through the command.
 
 * Configure the file ```dl.cfg``` with the credentials and the url bucket
 
-* Run the file for etl process
-```etl.py```
+* Run the file ```etl.py``` for etl process
 
 
 # Contact
