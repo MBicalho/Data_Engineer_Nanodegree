@@ -19,7 +19,6 @@ class LoadDimensionOperator(BaseOperator):
         self.sqlQuery = sqlQuery
 
     def execute(self, context):
-        self.log.info('LoadDimensionOperator not implemented yet')
         
         redshift = PostgresHook(postgres_conn_id=self.conn_id)
             
