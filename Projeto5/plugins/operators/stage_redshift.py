@@ -10,23 +10,21 @@ class StageToRedshiftOperator(BaseOperator):
     def __init__(self,
                  myTable,
                  bucket,
+                 key,
                  path,
-                 json,
-                 aws_credentials
-                 conn_id
+                 aws_credentials,
+                 conn_id,
                  *args, **kwargs):
 
         super(StageToRedshiftOperator, self).__init__(*args, **kwargs)
-        self.mytable = table
+        self.myTable = myTable
         self.bucket = bucket
+        self.key = key
         self.path = path
-        self.json = json
         self.aws_credentials = aws_credentials
-        self.aws_region = aws_region
         self.conn_id = conn_id
 
     def execute(self, context):
-        self.log.info('StageToRedshiftOperator not implemented yet')
 
         redshift = PostgresHook(postgres_conn_id=self.conn_id)
         
@@ -40,13 +38,16 @@ class StageToRedshiftOperator(BaseOperator):
         
         #Formating the files
         
-        self.path = self.path.format(**context)
+        self.key = self.key.format(**context)
         
-        redshift.run(f"COPY {self.myTable}
-                        FROM 's3://{self.bucket}/{self.path}'   \
+        redshift.run(f"COPY {self.myTable}  \
+                        FROM 's3://{self.bucket}/{self.key}'   \
                         ACCESS_KEY_ID '{credentials.access_key}'          \
                         SECRET_ACCESS_KEY '{credentials.secret_key}'   \
-                        FORMAT AS JSON '{self.json}'
-                     "
+                        FORMAT AS JSON '{self.path}'"
+                    )
         self.log.info(f"Copy {self.myTable} done!")
-        )
+
+
+
+
