@@ -18,14 +18,19 @@ class DataQualityOperator(BaseOperator):
         self.myTable = myTable
 
     def execute(self, context):
-        self.log.info('DataQualityOperator not implemented yet')
         
         redshift = PostgresHook(postgres_conn_id=self.conn_id)
         
         for myTable in self.myTable:
             table = redshit.get_records(f"SELECT TOP 10 * FROM {myTable}")
             
-            if (len(table) <= 0):
+            if (len(table) <= 0 or len(table[0]) <= 0):
                 raise ValueError (f"The table {myTable} returns with none result")
+                
+            
+            num = talbe[0][0]
+            
+            if (num == 0):
+                raise ValueError (f"Data Quality {myTable} failed!")
                 
             self.log.info(f"The table data quality passed")
