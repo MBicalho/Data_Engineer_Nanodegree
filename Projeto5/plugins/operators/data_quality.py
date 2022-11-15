@@ -22,7 +22,7 @@ class DataQualityOperator(BaseOperator):
         redshift = PostgresHook(postgres_conn_id=self.conn_id)
         
         for myTables in self.myTable:
-            table = redshit.get_records(f"SELECT TOP 10 * FROM {myTables}")
+            table = redshit.get_records(f"SELECT COUNT(*) FROM {myTables}")
             
             if (len(table) <= 0 or len(table[0]) <= 0):
                 raise ValueError (f"The table {myTables} returns with none result")
