@@ -22,6 +22,6 @@ class LoadFactOperator(BaseOperator):
         
         redshift = PostgresHook(postgres_conn_id=self.conn_id)
             
-        redshit.run(f"INSERT INTO {self.myTable} {self.sqlQuery}")
+        redshift.run(f"INSERT INTO {self.myTable} {self.sqlQuery}")
         
         self.log.info(f"Insert done! into {self.myTable}")
