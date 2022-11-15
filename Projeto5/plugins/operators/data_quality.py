@@ -8,8 +8,8 @@ class DataQualityOperator(BaseOperator):
 
     @apply_defaults
     def __init__(self,
+                 conn_id,
                  myTable=[],
-                 conn_id
                  *args, **kwargs):
 
         super(DataQualityOperator, self).__init__(*args, **kwargs)
@@ -21,16 +21,16 @@ class DataQualityOperator(BaseOperator):
         
         redshift = PostgresHook(postgres_conn_id=self.conn_id)
         
-        for myTable in self.myTable:
-            table = redshit.get_records(f"SELECT TOP 10 * FROM {myTable}")
+        for myTables in self.myTable:
+            table = redshit.get_records(f"SELECT TOP 10 * FROM {myTables}")
             
             if (len(table) <= 0 or len(table[0]) <= 0):
-                raise ValueError (f"The table {myTable} returns with none result")
+                raise ValueError (f"The table {myTables} returns with none result")
                 
             
-            num = talbe[0][0]
+            num = table[0][0]
             
             if (num == 0):
-                raise ValueError (f"Data Quality {myTable} failed!")
+                raise ValueError (f"Data Quality {myTables} failed!")
                 
             self.log.info(f"The table data quality passed")
