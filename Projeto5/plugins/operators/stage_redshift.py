@@ -13,7 +13,6 @@ class StageToRedshiftOperator(BaseOperator):
                  path,
                  json,
                  aws_credentials
-                 aws_region,
                  conn_id
                  *args, **kwargs):
 
@@ -39,16 +38,15 @@ class StageToRedshiftOperator(BaseOperator):
         redshift.run(f"TRUNCATE TABLE {self.myTable}")
         self.log.info(f"Deleting data from the table {self.myTable} done!")
         
+        #Formating the files
+        
+        self.path = self.path.format(**context)
+        
         redshift.run(f"COPY {self.myTable}
                         FROM 's3://{self.bucket}/{self.path}'   \
                         ACCESS_KEY_ID '{credentials.access_key}'          \
                         SECRET_ACCESS_KEY '{credentials.secret_key}'   \
-                        REGION '{self.aws_region}'              \
-                        JSON '{self.json}'
+                        FORMAT AS JSON '{self.json}'
                      "
         self.log.info(f"Copy {self.myTable} done!")
         )
-
-
-
-
