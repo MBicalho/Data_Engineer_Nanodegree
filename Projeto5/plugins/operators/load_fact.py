@@ -10,7 +10,7 @@ class LoadFactOperator(BaseOperator):
     def __init__(self,
                  myTable,
                  conn_id,
-                 sqlQuery
+                 sqlQuery,
                  *args, **kwargs):
 
         super(LoadFactOperator, self).__init__(*args, **kwargs)
@@ -19,7 +19,6 @@ class LoadFactOperator(BaseOperator):
         self.sqlQuery = sqlQuery
 
     def execute(self, context):
-        self.log.info('LoadFactOperator not implemented yet')
         
         redshift = PostgresHook(postgres_conn_id=self.conn_id)
             
