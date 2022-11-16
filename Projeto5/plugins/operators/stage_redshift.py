@@ -33,7 +33,7 @@ class StageToRedshiftOperator(BaseOperator):
         
         #delete data for the table
         
-        redshift.run(f"TRUNCATE TABLE {self.myTable}")
+        redshift.run(f"DELETE FROM {self.myTable}")
         self.log.info(f"Deleting data from the table {self.myTable} done!")
         
         #Formating the files
