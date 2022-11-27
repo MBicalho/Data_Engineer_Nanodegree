@@ -63,7 +63,8 @@ load_user_dimension_table = LoadDimensionOperator(
     dag=dag,
     conn_id = 'redshift',
     myTable = 'users',
-    sqlQuery = SqlQueries.user_table_insert
+    sqlQuery = SqlQueries.user_table_insert,
+    truncate = True
 )
 
 load_song_dimension_table = LoadDimensionOperator(
@@ -71,7 +72,8 @@ load_song_dimension_table = LoadDimensionOperator(
     dag=dag,
     conn_id = 'redshift',
     myTable = 'songs',
-    sqlQuery = SqlQueries.song_table_insert
+    sqlQuery = SqlQueries.song_table_insert,
+    truncate = True
 )
 
 load_artist_dimension_table = LoadDimensionOperator(
@@ -79,7 +81,8 @@ load_artist_dimension_table = LoadDimensionOperator(
     dag=dag,
     conn_id = 'redshift',
     myTable = 'artists',
-    sqlQuery = SqlQueries.artist_table_insert
+    sqlQuery = SqlQueries.artist_table_insert,
+    truncate = True
 )
 
 load_time_dimension_table = LoadDimensionOperator(
@@ -87,14 +90,17 @@ load_time_dimension_table = LoadDimensionOperator(
     dag=dag,
     conn_id = 'redshift',
     myTable = 'time',
-    sqlQuery = SqlQueries.time_table_insert
+    sqlQuery = SqlQueries.time_table_insert,
+    truncate = True
 )
 
 run_quality_checks = DataQualityOperator(
     task_id='Run_data_quality_checks',
     dag=dag,
     conn_id = 'redshift',
-    myTable = ['songplays', 'songs', 'artists', 'users', 'time']
+    myTable = ['songplays', 'songs', 'artists', 'users', 'time'],
+    dq_checks = [{ 'check_sql': 'SELECT COUNT(*) FROM '}, 
+        { 'check_sql': 'SELECT DISTINCT * FROM '}]
 )
 
 end_operator = DummyOperator(task_id='Stop_execution',  dag=dag)
